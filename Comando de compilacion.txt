@@ -1,0 +1,3 @@
+Comando de compilacion
+
+g++ main.cpp -o main.exe -lgsl -lm
