@@ -5,8 +5,8 @@
 gsl_rng *tau;
 
 //Parametros que podemos cambiar
-#define N 128
-#define T 3.5
+#define N 16
+#define T 2.2861
 #define pmc 1000000
 
 int main(void)
@@ -28,7 +28,7 @@ int main(void)
 
 
     FILE *fout;
-    fout=fopen("Resultados_128_350.dat","w");
+    fout=fopen("Resultados.dat","w");
 
     int semilla=198756;
     tau=gsl_rng_alloc(gsl_rng_taus);
@@ -148,7 +148,7 @@ int main(void)
                     aux2=aux2-0.5*s[j][k]*(s[nd][k]+s[na][k]+s[j][md]+s[j][ma]);//Auxiliar para hallar energia
                 }
             }
-            magn=magn+abs(aux1)/(N*N);//Vamos sumando a la magnetizacion y energia los resultados para luego promediar
+            magn=magn+abs(aux1)/(N*N);//Vamos sumando a la magnetizacion y energia los resultados auxiliares para luego promediar
             magne=magne+abs(aux1)/(N*N)*abs(aux1)/(N*N);
             energ=energ+aux2;
             energsq=energsq+(aux2*aux2);
@@ -178,16 +178,17 @@ int main(void)
 
 
     //Calculo de las magnitudes
-    magn=magn/(pmc/100);
-    magne=(sqrt(magne/(pmc/100)-magn*magn)/sqrt((pmc/100)))*2;
-    aux1=(energ/(pmc/100));
+    double medidas=(pmc/100);
+    magn=magn/medidas;
+    magne=(sqrt(magne/medidas-magn*magn)/sqrt(medidas))*2;
+    aux1=(energ/medidas);
     energ=aux1/(2*N*N);
-    energe=2*(sqrt((energsq/(pmc/100)-aux1*aux1)/(2*N*N)))/sqrt((pmc/100));
-    cn=abs(energsq/(pmc/100)-aux1*aux1)/(N*N*T);
+    energe=2*(sqrt((energsq/medidas-aux1*aux1)/(2*N*N)))/sqrt(medidas);
+    cn=abs(energsq/medidas-aux1*aux1)/(N*N*T);
 
     for(l=0;l<N;l++)
     {
-        f[l]=f[l]/(pmc/100);
+        f[l]=f[l]/medidas;
     }
     
     //Pasamos a ficheros las magnitudes
